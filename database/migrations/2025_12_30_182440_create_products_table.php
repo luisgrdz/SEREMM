@@ -14,14 +14,46 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->string('brand');
-            $table->string('model');
+
+            // --- Datos Básicos Comunes ---
             $table->string('sku')->unique();
+            $table->string('brand')->nullable();
+            $table->string('model');
             $table->text('description')->nullable();
-            $table->decimal('purchase_price', 12, 2)->default(0); // Costo interno
-            $table->decimal('sale_price', 12, 2)->default(0);     // Precio cliente
-            $table->json('tech_specs')->nullable();               // ESPECIFICACIONES TÉCNICAS
-            $table->string('image_path')->nullable();             // Foto del equipo
+            $table->string('image_path')->nullable();
+            $table->string('unit')->default('pieza'); // pieza, metro, kit, servicio
+
+            // --- Finanzas e Inventario ---
+            $table->decimal('purchase_price', 12, 2)->default(0); // Tu costo
+            $table->decimal('sale_price', 12, 2)->default(0);     // Precio al cliente
+            $table->integer('stock')->default(0);
+
+            // --- Especificaciones Técnicas por Categoría ---
+
+            // 1. Paneles Solares
+            $table->integer('wattage')->nullable();
+            $table->decimal('efficiency', 5, 2)->nullable();
+            $table->string('tech_type')->nullable(); // Mono-PERC, Bifacial
+
+            // 2. Inversores y Protecciones Eléctricas
+            $table->integer('phases')->nullable();      // 1, 2, 3 fases
+            $table->integer('max_dc_voltage')->nullable();
+            $table->integer('nominal_voltage')->nullable(); // 110V, 220V, 440V
+            $table->string('amperage')->nullable();     // Para Breakers (ej. 20A)
+            $table->string('caliber')->nullable();      // Para Cables (ej. 10 AWG)
+
+            // 3. Almacenamiento y Baterías (NUEVO)
+            $table->decimal('capacity_kwh', 8, 2)->nullable(); // Capacidad en kWh
+            $table->integer('capacity_ah')->nullable();        // Capacidad en Ah
+            $table->integer('battery_voltage')->nullable();    // 12V, 24V, 48V
+
+            // 4. Bombas Solares
+            $table->decimal('max_flow_rate', 8, 2)->nullable(); // L/min o m3/h
+            $table->decimal('max_head', 8, 2)->nullable();      // Altura máxima en metros
+
+            // --- Campo de flexibilidad total ---
+            $table->json('tech_specs')->nullable(); // Para accesorios de monitoreo o montajes
+
             $table->timestamps();
         });
     }

@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('settings', function (Blueprint $table) {
-    $table->id();
-    $table->string('key')->unique(); // Ej: cfe_kwh_cost
-    $table->string('label');         // Ej: Costo por kWh CFE
-    $table->string('value');         // Ej: 3.50
-    $table->timestamps();
-});
+            $table->id();
+            $table->string('key')->unique(); // Ej: 'whatsapp_number'
+            $table->string('label');         // Ej: 'Número de WhatsApp'
+            $table->text('value')->nullable();
+            $table->string('type')->default('text');
+            $table->timestamps();
+        });
     }
 
     /**

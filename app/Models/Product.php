@@ -9,13 +9,15 @@ class Product extends Model
 {
     protected $fillable = [
         'category_id',
-        'brand',
-        'model',
         'sku',
+        'brand',
+        'model', // Nota: si en tu tabla el nombre es 'name', cámbialo aquí y en el Form
         'description',
-        'purchase_price',
-        'sale_price',
-        'tech_specs',
+        'wattage',
+        'efficiency',
+        'tech_type',
+        'price',
+        'stock',
         'image_path'
     ];
 
