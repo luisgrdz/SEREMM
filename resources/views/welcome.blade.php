@@ -262,5 +262,64 @@
         </div>
     </div>
 </section>
+<section id="productos" class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-end mb-12 border-b border-gray-200 pb-4">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900">Equipos de Alta Eficiencia</h2>
+                <p class="text-gray-500 mt-2">Componentes certificados para máximo rendimiento energético.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($products as $product)
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
+                <div class="px-4 pt-4">
+                    <span class="inline-block px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest {{ $product->tech_type == 'bifacial' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600' }}">
+                        {{ str_replace('_', ' ', $product->tech_type ?? 'Componente') }}
+                    </span>
+                </div>
+
+                <div class="p-5 flex-grow">
+                    <h3 class="text-lg font-bold text-slate-900 leading-tight mb-1">{{ $product->name }}</h3>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-tighter mb-4">{{ $product->brand }}</p>
+                    
+                    <div class="flex items-center justify-between py-3 border-y border-gray-50 mb-4">
+                        <div class="flex flex-col">
+                            <span class="text-2xl font-black text-slate-800">{{ $product->wattage }}<span class="text-sm">W</span></span>
+                            <span class="text-[10px] text-gray-400 uppercase font-bold">Potencia Real</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xl font-bold text-slate-900">${{ number_format($product->price, 0) }}</span>
+                            <span class="block text-[10px] text-gray-400 uppercase font-bold">Precio Unitario</span>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center text-xs text-gray-500">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            Eficiencia: {{ $product->efficiency ?? '20' }}%
+                        </li>
+                        <li class="flex items-center text-xs text-gray-500">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            Disponibilidad: {{ $product->stock }} unidades
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-4 bg-slate-50 mt-auto">
+                    <button class="w-full bg-white border border-slate-200 text-slate-800 py-2 rounded-lg text-sm font-bold hover:bg-slate-900 hover:text-white transition-all shadow-sm">
+                        Añadir a Cotización
+                    </button>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        
+        <div class="mt-12 text-center">
+            <p class="text-sm text-gray-400">¿Necesitas un sistema a medida? <a href="#contacto" class="text-orange-500 font-bold underline">Habla con un ingeniero.</a></p>
+        </div>
+    </div>
+</section>
 
 @endsection
