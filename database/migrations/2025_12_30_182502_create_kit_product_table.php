@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kits', function (Blueprint $table) {
+        Schema::create('kit_product', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Ej: Kit Solar 4 Paneles
-            $table->text('description')->nullable();
-            $table->decimal('base_price', 10, 2)->nullable(); // Precio manual o calculado
+            $table->foreignId('kit_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity')->default(1);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kits');
+        Schema::dropIfExists('kit_product');
     }
 };

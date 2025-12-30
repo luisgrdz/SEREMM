@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kit_product', function (Blueprint $table) {
+        Schema::create('project_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kit_id')->constrained()->onDelete('cascade');
-            $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity'); // Cuántos de este producto van en el kit
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->string('image_path');
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kit_product');
+        Schema::dropIfExists('project_images');
     }
 };
