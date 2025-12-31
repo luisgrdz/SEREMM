@@ -1,34 +1,32 @@
-# Usamos una imagen base oficial de PHP con FPM y Nginx pre-instalado
-# Esta imagen de serversideup es altamente recomendada para Laravel
+# Usamos la imagen optimizada para Laravel (PHP 8.3 + Nginx)
 FROM serversideup/php:8.3-fpm-nginx
 
-# Cambiamos a root para instalar dependencias si es necesario
+# Seteamos variables de entorno para que Composer no de problemas como root
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Cambiamos a root para configurar carpetas
 USER root
 
-# Instalamos extensiones de PHP necesarias para Laravel 12 y Filament
+# Instalamos SOLAMENTE dependencias de sistema necesarias (sin compilar PHP)
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     zip \
     unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd bcmath intl
+    libpq-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configuramos el directorio de trabajo
+# Directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiamos los archivos del proyecto
+# Copiamos el proyecto con los permisos correctos para el usuario de la imagen
 COPY --chown=www-data:www-data . .
 
-# Instalamos dependencias de Composer
+# Instalamos las dependencias de Composer (Laravel + Filament)
 RUN composer install --no-dev --optimize-autoloader
 
-# Configuramos permisos para Laravel
+# Ajustamos permisos finales para storage y cache
 RUN chmod -R 775 storage bootstrap/cache
 
-# Exponemos el puerto que usa Render (por defecto suele buscar el 8080 o 10000)
-# Pero esta imagen usa el 8080 por defecto para usuarios no-root
+# Exponemos el puerto de Render
 EXPOSE 8080
 
-# El comando de inicio ya está gestionado por la imagen base
+# No necesitamos poner CMD, la imagen base ya sabe iniciar Nginx y PHP-FPM
