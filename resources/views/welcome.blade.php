@@ -224,6 +224,64 @@
         </div>
     </div>
 
+  {{-- 4. SECCIÓN DE CALCULADORA INTELIGENTE --}}
+    <section id="calculadora" class="py-24 bg-slate-50" x-data="{ 
+    pagoMensual: 2500,
+    precioTarifa: 0,
+    tarifas: {{ json_encode($tarifas) }},
+    factorSolar: {{ $solar_factor }},
+    get ahorroAnual() {
+        return (this.pagoMensual * 12) * 0.95;
+    },
+    get paneles() {
+        if (!this.precioTarifa) return 0;
+        let kwhMes = this.pagoMensual / parseFloat(this.precioTarifa);
+        return Math.ceil(kwhMes / this.factorSolar * 2);
+    }
+}">
+    <div class="max-w-4xl mx-auto px-6 grid md:grid-cols-2 bg-white rounded-3xl shadow-xl overflow-hidden">
+        <div class="p-10 bg-slate-900 text-white">
+            <h2 class="text-2xl font-bold mb-6">Configura tu Ahorro</h2>
+            <div class="space-y-6">
+                <div>
+                    <label class="text-xs font-bold text-orange-500 uppercase">1. Elige tu Tarifa</label>
+                    <select x-model="precioTarifa" class="w-full bg-slate-800 rounded-xl p-3 mt-2">
+                        <option value="0">Seleccionar...</option>
+                        <template x-for="t in tarifas">
+                            <option :value="t.precio" x-text="t.nombre"></option>
+                        </template>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-orange-500 uppercase">2. Monto del Recibo</label>
+                    <input type="range" min="500" max="20000" x-model="pagoMensual" class="w-full accent-orange-500 mt-4">
+                    <p class="text-2xl font-bold mt-2">$<span x-text="pagoMensual"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="p-10 flex flex-col justify-center">
+            <template x-if="precioTarifa > 0">
+                <div class="space-y-6">
+                    <p class="text-sm text-gray-500">Basado en un costo de $<span x-text="precioTarifa"></span> por kWh:</p>
+                    <div>
+                        <span class="block text-gray-400 text-xs uppercase">Ahorro Anual</span>
+                        <span class="text-3xl font-black text-green-600">$<span x-text="new Intl.NumberFormat().format(ahorroAnual)"></span></span>
+                    </div>
+                    <div>
+                        <span class="block text-gray-400 text-xs uppercase">Paneles Recomendados</span>
+                        <span class="text-3xl font-black text-slate-900"><span x-text="paneles"></span> Módulos</span>
+                    </div>
+                </div>
+            </template>
+            <template x-if="precioTarifa == 0">
+                <p class="text-gray-400 italic">Por favor, selecciona una tarifa para calcular.</p>
+            </template>
+        </div>
+    </div>
+</section>
+
+
+
 </div> {{-- Fin del x-data --}}
 
 @endsection

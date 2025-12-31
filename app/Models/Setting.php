@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $fillable = [
-        'key',
-        'label',
-        'value',
-        'type'
+    protected $fillable = ['key', 'label', 'value'];
+
+    // Esto permite guardar las tarifas como un arreglo (JSON)
+    protected $casts = [
+        'value' => 'array',
     ];
 }
